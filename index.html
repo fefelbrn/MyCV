@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Noire</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/script.js" defer></script>
+    <script src="js/easter-eggs.js" defer></script>
+    <script src="js/code-animation.js" defer></script>
+    <script src="js/cv-tab.js" defer></script>
+</head>
+<body>
+    <!-- Layer 1: Contenu du site (peut bouger/zoomer) -->
+    <div class="content-layer">
+        <!-- Texte central -->
+        <div class="center-text">
+            <span class="letter-w">w</span>
+            <span class="letter-o">o</span>
+            <span class="letter-r">r</span>
+            <span class="letter-k">k</span>
+        </div>
+        
+        <!-- Animation code style espionnage -->
+        <div class="code-animation code-animation-top-right" id="codeAnimation"></div>
+        <div class="code-animation code-animation-bottom-left" id="codeAnimationBottomLeft"></div>
+        
+        <!-- Animation cercles 3D -->
+        <div class="rings-container">
+            <div class="ring ring-1"></div>
+            <div class="ring ring-2"></div>
+            <div class="ring ring-3"></div>
+        </div>
+        
+        <!-- Easter egg cercle -->
+        <a href="#" class="easter-egg-circle" id="easterEgg">
+            <span class="easter-egg-content"></span>
+        </a>
+        
+        <!-- Languette CV -->
+        <div class="cv-tab" id="cvTab">
+            <div class="cv-tab-handle">
+                <span class="cv-arrow"></span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Écran de chargement -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-terminal">
+            <div class="terminal-header">
+                <div class="terminal-buttons">
+                    <span class="terminal-button terminal-button-red"></span>
+                    <span class="terminal-button terminal-button-yellow"></span>
+                    <span class="terminal-button terminal-button-green"></span>
+                </div>
+                <div class="terminal-title">system.exe</div>
+                <a href="#" class="terminal-bug" id="terminalBug" title="🐛 Bug">
+                    <span class="bug-body"></span>
+                    <span class="bug-antenna bug-antenna-left"></span>
+                    <span class="bug-antenna bug-antenna-right"></span>
+                    <span class="bug-leg bug-leg-1"></span>
+                    <span class="bug-leg bug-leg-2"></span>
+                    <span class="bug-leg bug-leg-3"></span>
+                    <span class="bug-leg bug-leg-4"></span>
+                </a>
+            </div>
+            <div class="terminal-body">
+                <div class="terminal-line">
+                    <span class="terminal-prompt">$</span>
+                    <span class="terminal-text">Initializing system...</span>
+                </div>
+                <div class="terminal-line">
+                    <span class="terminal-prompt">$</span>
+                    <span class="terminal-text">Loading modules...</span>
+                </div>
+                <div class="terminal-line">
+                    <span class="terminal-prompt">$</span>
+                    <span class="terminal-text">Preparing data...</span>
+                </div>
+                <div class="packets-container" id="packetsContainer"></div>
+                <div class="network-graphs">
+                    <div class="network-graph-container">
+                        <div class="network-graph-header">
+                            <span class="network-label">↓ In:</span>
+                            <span class="network-value" id="networkIn">0.0 Mo/s</span>
+                        </div>
+                        <div class="network-graph-box" id="networkInGraph">
+                            <svg class="network-graph-svg" viewBox="0 0 200 60" preserveAspectRatio="none">
+                                <polyline class="network-graph-line network-graph-line-in" points="" fill="none" stroke="#ffffff" stroke-width="1.5"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="network-graph-container">
+                        <div class="network-graph-header">
+                            <span class="network-label">↑ Out:</span>
+                            <span class="network-value" id="networkOut">0.0 Mo/s</span>
+                        </div>
+                        <div class="network-graph-box network-graph-box-out" id="networkOutGraph">
+                            <svg class="network-graph-svg" viewBox="0 0 200 60" preserveAspectRatio="none">
+                                <polyline class="network-graph-line network-graph-line-out" points="" fill="none" stroke="#ffffff" stroke-width="1.5"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="loading-bar-container">
+                    <div class="loading-bar" id="loadingBar">
+                        <div class="loading-bar-fill" id="loadingBarFill"></div>
+                    </div>
+                    <div class="loading-percentage" id="loadingPercentage">0%</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Page CV (s'affiche après le chargement) -->
+    <div class="cv-page" id="cvPage">
+        <!-- Votre contenu CV sera ajouté ici -->
+        <div class="cv-content">
+            <h1>CV</h1>
+            <p>Votre contenu CV sera ajouté ici</p>
+        </div>
+    </div>
+</body>
+</html>
+
