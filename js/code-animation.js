@@ -1,15 +1,8 @@
-/**
- * Spy movie style code animation
- * 
- * Generates random code lines that appear character by character
- * with an opacity gradient effect.
- * 
- * Two instances: top-right (normal gradient) and bottom-left (inverted gradient)
- */
+// Code animation that looks like a spy movie terminal
+// Lines appear character by character with a nice fade effect
 (function() {
     'use strict';
     
-    // Function to initialize a code animation
     function initCodeAnimation(containerId, invertGradient = false) {
         const codeContainer = document.getElementById(containerId);
         if (!codeContainer) return;
@@ -72,17 +65,17 @@
         
         lines.forEach((line, index) => {
             if (line.classList.contains('typing')) {
-                // Currently typing line: full white
+                // Line being typed is fully visible
                 line.style.opacity = '1';
                 line.style.color = '#ffffff';
             } else {
                 let opacity;
                 if (invertGradient) {
-                    // Inverted gradient: top lines (old) are brighter
+                    // For bottom-left: older lines at top are brighter
                     const distanceFromTop = index;
                     opacity = Math.max(0.6, 0.95 - (distanceFromTop * 0.05));
                 } else {
-                    // Normal gradient: bottom lines (recent) are brighter
+                    // For top-right: newer lines at bottom are brighter
                     const distanceFromBottom = totalLines - 1 - index;
                     opacity = Math.max(0.6, 0.95 - (distanceFromBottom * 0.05));
                 }
@@ -96,19 +89,17 @@
         let index = 0;
         isTyping = true;
         
-        // Update gradient when starting to type
         updateOpacityGradient();
         
         function typeChar() {
             if (index < text.length) {
                 lineElement.textContent = text.substring(0, index + 1);
                 index++;
-                setTimeout(typeChar, 30); // Typing speed (30ms per character)
+                setTimeout(typeChar, 30); // 30ms feels about right for typing speed
             } else {
                 isTyping = false;
-                // Once finished, line becomes translucent
                 lineElement.classList.remove('typing');
-                updateOpacityGradient(); // Update gradient
+                updateOpacityGradient();
                 if (onComplete) onComplete();
             }
         }
@@ -117,11 +108,11 @@
     }
     
     function generateRandomCode() {
-        if (isTyping) return; // Wait for current line to finish
+        if (isTyping) return; // Don't start a new line while one is typing
         
         const randomCode = codeFragments[Math.floor(Math.random() * codeFragments.length)];
         
-        // Remove first line if max reached
+        // Remove oldest line if we hit the limit
         if (currentLines.length >= maxLines) {
             const firstLine = codeContainer.querySelector('.code-line');
             if (firstLine) {
@@ -135,7 +126,6 @@
             currentLines.shift();
         }
         
-        // Create new line
         const codeLine = document.createElement('div');
         codeLine.className = 'code-line typing';
         codeLine.textContent = '';
@@ -143,17 +133,15 @@
         
         currentLines.push(randomCode);
         
-        // Update gradient for all existing lines
         updateOpacityGradient();
         
-        // Start typing the line
         typeLine(randomCode, codeLine);
     }
     
-    // Generate code every 800ms (faster)
+    // Add a new line every 800ms
     setInterval(generateRandomCode, 800);
     
-    // Initialize with some already complete lines
+    // Start with a few lines already there so it doesn't look empty
     for (let i = 0; i < 6; i++) {
         const randomCode = codeFragments[Math.floor(Math.random() * codeFragments.length)];
         currentLines.push(randomCode);
@@ -165,14 +153,12 @@
         codeContainer.appendChild(codeLine);
     }
     
-    // Apply initial gradient
     updateOpacityGradient();
     }
     
-    // Initialize both animations
-    // Top right: normal gradient (recent = bright)
+    // Top right uses normal gradient (newer = brighter)
     initCodeAnimation('codeAnimation', false);
-    // Bottom left: inverted gradient (old = bright)
+    // Bottom left uses inverted gradient (older = brighter)
     initCodeAnimation('codeAnimationBottomLeft', true);
     
 })();

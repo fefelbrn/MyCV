@@ -1,13 +1,5 @@
-/**
- * CV tab and loading screen management
- * 
- * Features:
- * - CV tab drag & drop
- * - Terminal style loading screen
- * - Real-time network graphs
- * - Progress bar animation
- * - Transition to CV page
- */
+// CV tab drag handler and loading screen
+// When you drag the tab up, it shows a cool terminal-style loading screen
 (function() {
     'use strict';
     
@@ -18,8 +10,8 @@
     let startY = 0;
     let currentY = 0;
     let initialBottom = 0;
-    const threshold = 150; // Distance to drag to trigger redirection
-    const cvUrl = '#'; // Replace with your CV URL
+    const threshold = 150; // How far to drag before triggering
+    const cvUrl = '#'; // Not used yet, but keeping it for later
     
     function handleStart(e) {
         isDragging = true;
@@ -36,14 +28,14 @@
         if (!isDragging) return;
         
         const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-        const deltaY = startY - clientY; // Negative = upward
+        const deltaY = startY - clientY; // Positive = dragging up
         
-        // Limit movement upward only
+        // Only allow dragging upward
         if (deltaY > 0) {
             currentY = Math.min(deltaY, threshold + 50);
             cvTab.style.transform = `translateX(-50%) translateY(-${currentY}px)`;
             
-            // Visual feedback based on distance
+            // Fade out a bit as you drag further
             const progress = Math.min(currentY / threshold, 1);
             cvTab.style.opacity = 1 - (progress * 0.3);
         }
@@ -57,19 +49,16 @@
         isDragging = false;
         cvTab.classList.remove('dragging');
         
-        // If dragged far enough, show loading screen
+        // If they dragged far enough, trigger the loading screen
         if (currentY >= threshold) {
-            // Hide tab
             cvTab.style.transition = 'transform 0.3s ease-out, opacity 0.3s ease-out';
             cvTab.style.transform = `translateX(-50%) translateY(-${threshold + 100}px)`;
             cvTab.style.opacity = '0';
             
-            // Show loading screen
             const loadingScreen = document.getElementById('loadingScreen');
             if (loadingScreen) {
                 loadingScreen.classList.add('visible');
                 
-                // Animate progress bar with variable speed
                 const loadingBarFill = document.getElementById('loadingBarFill');
                 const loadingPercentage = document.getElementById('loadingPercentage');
                 const packetsContainer = document.getElementById('packetsContainer');
@@ -79,12 +68,12 @@
                 const networkOutGraph = document.querySelector('#networkOutGraph .network-graph-line');
                 const cvPage = document.getElementById('cvPage');
                 
-                // History for graphs
+                // Store data for the network graphs
                 const maxDataPoints = 100;
                 const networkInHistory = [];
                 const networkOutHistory = [];
                 
-                // Packet messages
+                // Fake package messages to make it look realistic
                 const packetMessages = [
                     'Downloading package: core-utils-2.4.1...',
                     'Installing module: network-driver-1.2.3...',
@@ -104,21 +93,24 @@
                 ];
                 
                 let progress = 0;
-                const totalDuration = 7500; // 7.5 seconds
                 const interval = 16; // ~60fps
+                // Speed multiplier to make it finish in 4 seconds
+                // Math: 4000ms / 16ms = 250 iterations, need 100/250 = 0.4 avg speed
+                // Original avg was ~0.17, so multiply by 2.35
+                const speedMultiplier = 2.35;
                 let lastPacketTime = 0;
                 let lastNetworkUpdateTime = 0;
-                const networkUpdateInterval = 100; // Update every 0.1s
+                const networkUpdateInterval = 100; // Update network stats every 0.1s
                 let packetIndex = 0;
                 
-                // Loading phases with different speeds
+                // Different speed phases to make it feel more realistic
                 const phases = [
-                    { start: 0, end: 15, speed: 0.08 },   // Slow at start
-                    { start: 15, end: 35, speed: 0.25 },  // Fast
-                    { start: 35, end: 50, speed: 0.12 },  // Slows down
-                    { start: 50, end: 70, speed: 0.30 },  // Very fast
-                    { start: 70, end: 85, speed: 0.10 },  // Slows down
-                    { start: 85, end: 100, speed: 0.15 }   // Moderate end
+                    { start: 0, end: 15, speed: 0.08 * speedMultiplier },   // Slow start
+                    { start: 15, end: 35, speed: 0.25 * speedMultiplier },  // Speeds up
+                    { start: 35, end: 50, speed: 0.12 * speedMultiplier },  // Slows a bit
+                    { start: 50, end: 70, speed: 0.30 * speedMultiplier },  // Really fast
+                    { start: 70, end: 85, speed: 0.10 * speedMultiplier },  // Slows again
+                    { start: 85, end: 100, speed: 0.15 * speedMultiplier }   // Steady finish
                 ];
                 
                 function getCurrentSpeed(currentProgress) {
@@ -131,11 +123,10 @@
                 }
                 
                 function calculateNetworkSpeed(speed) {
-                    // Convert progress speed to Mo/s
-                    // High speed = more Mo/s
-                    // Base: 0.08 speed = ~2 Mo/s, 0.30 speed = ~15 Mo/s
-                    const baseMoPerSecond = speed * 50 * 100; // Multiplier x100 for high values
-                    const variation = (Math.random() - 0.5) * 30; // Random variation of ±15 Mo/s
+                    // Convert loading speed to fake Mo/s values
+                    // Faster loading = higher numbers (looks more impressive)
+                    const baseMoPerSecond = speed * 50 * 100;
+                    const variation = (Math.random() - 0.5) * 30; // Add some randomness
                     return Math.max(10, baseMoPerSecond + variation);
                 }
                 
@@ -143,41 +134,38 @@
                     if (!networkIn || !networkOut) return;
                     
                     const inSpeed = calculateNetworkSpeed(speed);
-                    // Out is generally 10-20% of In (less outgoing data)
+                    // Out is usually less than In (makes sense)
                     const outSpeed = inSpeed * (0.1 + Math.random() * 0.1);
                     
                     networkIn.textContent = inSpeed.toFixed(1) + ' Mo/s';
                     networkOut.textContent = outSpeed.toFixed(1) + ' Mo/s';
                     
-                    // Add to history
                     networkInHistory.push(inSpeed);
                     networkOutHistory.push(outSpeed);
                     
-                    // Limit history size
+                    // Keep only the last 100 points
                     if (networkInHistory.length > maxDataPoints) {
                         networkInHistory.shift();
                         networkOutHistory.shift();
                     }
                     
-                    // Update graphs
                     updateGraphs();
                 }
                 
                 function updateGraphs() {
                     if (!networkInGraph || !networkOutGraph) return;
                     
-                    // Find min and max values for scale
+                    // Find the max value to scale the graph properly
                     const allInValues = networkInHistory.length > 0 ? networkInHistory : [0];
                     const allOutValues = networkOutHistory.length > 0 ? networkOutHistory : [0];
                     const maxIn = Math.max(...allInValues, 1);
                     const maxOut = Math.max(...allOutValues, 1);
                     
-                    // Graph dimensions (viewBox: 0 0 200 60)
                     const graphWidth = 200;
                     const graphHeight = 60;
                     const padding = 2;
                     
-                    // Generate points for In graph
+                    // Draw the In graph line
                     if (networkInHistory.length > 0) {
                         const pointsIn = networkInHistory.map((value, index) => {
                             const x = (index / (maxDataPoints - 1)) * (graphWidth - padding * 2) + padding;
@@ -187,7 +175,7 @@
                         networkInGraph.setAttribute('points', pointsIn);
                     }
                     
-                    // Generate points for Out graph
+                    // Draw the Out graph line
                     if (networkOutHistory.length > 0) {
                         const pointsOut = networkOutHistory.map((value, index) => {
                             const x = (index / (maxDataPoints - 1)) * (graphWidth - padding * 2) + padding;
@@ -216,10 +204,10 @@
                     packetLine.appendChild(text);
                     packetsContainer.appendChild(packetLine);
                     
-                    // Scroll to bottom
+                    // Auto-scroll to see the latest line
                     packetsContainer.scrollTop = packetsContainer.scrollHeight;
                     
-                    // Limit number of visible lines
+                    // Don't let it get too long, remove oldest lines
                     const lines = packetsContainer.querySelectorAll('.packet-line');
                     if (lines.length > 8) {
                         lines[0].remove();
@@ -232,7 +220,7 @@
                     const currentSpeed = getCurrentSpeed(progress);
                     progress += currentSpeed;
                     
-                    // Update network stats every 0.1s
+                    // Update network stats periodically
                     const now = Date.now();
                     const timeSinceLastNetworkUpdate = now - lastNetworkUpdateTime;
                     if (timeSinceLastNetworkUpdate >= networkUpdateInterval) {
@@ -240,7 +228,7 @@
                         lastNetworkUpdateTime = now;
                     }
                     
-                    // Add packets according to speed
+                    // Add packet messages, faster when loading is faster
                     const timeSinceLastPacket = now - lastPacketTime;
                     const packetInterval = currentSpeed > 0.2 ? 200 : (currentSpeed > 0.15 ? 350 : 600);
                     
@@ -257,17 +245,16 @@
                         progress = 100;
                         clearInterval(loadingInterval);
                         
-                        // Reset network stats
+                        // Clean up
                         if (networkIn) networkIn.textContent = '0.0 Mo/s';
                         if (networkOut) networkOut.textContent = '0.0 Mo/s';
                         
-                        // Reset graphs
                         networkInHistory.length = 0;
                         networkOutHistory.length = 0;
                         if (networkInGraph) networkInGraph.setAttribute('points', '');
                         if (networkOutGraph) networkOutGraph.setAttribute('points', '');
                         
-                        // Add final message
+                        // Show success message
                         if (packetsContainer) {
                             const finalLine = document.createElement('div');
                             finalLine.className = 'packet-line fast';
@@ -275,7 +262,7 @@
                             packetsContainer.appendChild(finalLine);
                         }
                         
-                        // Hide loading screen and show CV page
+                        // Switch to CV page after a short delay
                         setTimeout(() => {
                             loadingScreen.classList.remove('visible');
                             if (cvPage) {
@@ -293,7 +280,7 @@
                 }, interval);
             }
         } else {
-            // Return to initial position
+            // Didn't drag far enough, snap back
             cvTab.style.transition = 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
             cvTab.style.transform = 'translateX(-50%) translateY(0)';
             cvTab.style.opacity = '1';
@@ -302,12 +289,11 @@
         currentY = 0;
     }
     
-    // Mouse events
     cvTab.addEventListener('mousedown', handleStart);
     document.addEventListener('mousemove', handleMove);
     document.addEventListener('mouseup', handleEnd);
     
-    // Touch events
+    // Also handle touch for mobile
     cvTab.addEventListener('touchstart', handleStart, { passive: false });
     document.addEventListener('touchmove', handleMove, { passive: false });
     document.addEventListener('touchend', handleEnd);

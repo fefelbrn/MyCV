@@ -1,17 +1,6 @@
-/**
- * Main styles - Web Portfolio Template
- * 
- * Structure:
- * - Reset & base
- * - Layers (content-layer, frame-layer)
- * - Main elements (text, animations)
- * - Loading screen
- * - CV page
- */
+/* Main stylesheet for the portfolio site */
 
-/* ============================================
-   RESET & BASE
-   ============================================ */
+/* Reset */
 * {
     margin: 0;
     padding: 0;

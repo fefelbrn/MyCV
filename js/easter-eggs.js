@@ -1,36 +1,24 @@
-/**
- * Easter eggs management
- * 
- * This file contains all easter eggs on the site:
- * - Clickable bug in the terminal
- * - Circle easter egg (if present)
- */
-
+// Easter eggs - hidden surprises for curious visitors
 (function() {
     'use strict';
     
-    /**
-     * Easter Egg 1: Bug in terminal
-     */
+    // Bug in the terminal header
     const terminalBug = document.getElementById('terminalBug');
     if (terminalBug) {
         terminalBug.addEventListener('click', function(e) {
             e.preventDefault();
-            // Action to define (can be a link, animation, etc.)
             console.log('🐛 Bug clicked!');
-            // Example: window.open('your-link', '_blank');
+            // TODO: Add something fun here
         });
     }
     
-    /**
-     * Easter Egg 2: Circle in top left
-     */
+    // Circle in top left corner
     const easterEgg = document.getElementById('easterEgg');
     if (easterEgg) {
         easterEgg.addEventListener('click', function(e) {
             e.preventDefault();
-            // Action to define
             console.log('🥚 Easter egg clicked!');
+            // TODO: Add something fun here too
         });
     }
     
