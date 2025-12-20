@@ -300,3 +300,33 @@
     
 })();
 
+// CV close button handler
+(function() {
+    'use strict';
+    
+    const cvCloseBtn = document.getElementById('cvCloseBtn');
+    const cvPage = document.getElementById('cvPage');
+    const cvTab = document.getElementById('cvTab');
+    const loadingScreen = document.getElementById('loadingScreen');
+    
+    if (!cvCloseBtn || !cvPage) return;
+    
+    cvCloseBtn.addEventListener('click', function() {
+        // Hide CV page
+        cvPage.classList.remove('visible');
+        
+        // Reset CV tab position and visibility
+        if (cvTab) {
+            cvTab.style.transition = 'transform 0.5s ease-out, opacity 0.5s ease-out';
+            cvTab.style.transform = 'translateX(-50%) translateY(0)';
+            cvTab.style.opacity = '0.4';
+        }
+        
+        // Hide loading screen if visible
+        if (loadingScreen) {
+            loadingScreen.classList.remove('visible');
+        }
+    });
+    
+})();
+
