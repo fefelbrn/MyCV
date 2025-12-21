@@ -42,38 +42,44 @@
         switch(previewType) {
             case 'terminal':
                 return `
-                    <div class="preview-terminal">
-                        <div class="preview-terminal-header">
-                            <div class="preview-terminal-dot preview-terminal-dot-red"></div>
-                            <div class="preview-terminal-dot preview-terminal-dot-yellow"></div>
-                            <div class="preview-terminal-dot preview-terminal-dot-green"></div>
+                    <div class="preview-terminal-wrapper">
+                        <div class="preview-center-text">work</div>
+                        <div class="preview-code-top-right">
+                            <div class="preview-code-line-small">const buffer = readBuffer();</div>
+                            <div class="preview-code-line-small">await send(data);</div>
                         </div>
-                        <div class="preview-terminal-body">
-                            <div class="preview-terminal-line">
-                                <span class="preview-terminal-prompt">$</span>
-                                <span class="preview-terminal-text">work</span>
-                            </div>
-                            <div class="preview-terminal-code">
-                                <span class="preview-code-line">const buffer = readBuffer();</span>
-                                <span class="preview-code-line">await send(data);</span>
-                            </div>
+                        <div class="preview-code-bottom-left">
+                            <div class="preview-code-line-small">function decrypt(key) {</div>
+                            <div class="preview-code-line-small">  return result;</div>
+                        </div>
+                        <div class="preview-rings">
+                            <div class="preview-ring"></div>
                         </div>
                     </div>
                 `;
             case '3d-text':
                 return `
                     <div class="preview-3d">
-                        <div class="preview-3d-text">3D</div>
-                        <div class="preview-3d-ring"></div>
+                        <div class="preview-3d-torus">
+                            <div class="preview-3d-torus-ring"></div>
+                            <div class="preview-3d-torus-ring-inner"></div>
+                        </div>
+                        <div class="preview-3d-text-inside">WORK</div>
                     </div>
                 `;
             case 'interactive':
                 return `
                     <div class="preview-interactive">
-                        <div class="preview-cursor"></div>
-                        <div class="preview-particle"></div>
-                        <div class="preview-particle"></div>
-                        <div class="preview-particle"></div>
+                        <div class="preview-interactive-text">
+                            <span class="preview-letter" style="color: #ff00ff;">F</span>
+                            <span class="preview-letter" style="color: #ffff00;">E</span>
+                            <span class="preview-letter" style="color: #00ffff;">L</span>
+                            <span class="preview-letter" style="color: #ff6600;">I</span>
+                            <span class="preview-letter" style="color: #ff00aa;">Z</span>
+                        </div>
+                        <div class="preview-cursor-interactive"></div>
+                        <div class="preview-particle-interactive"></div>
+                        <div class="preview-particle-interactive"></div>
                     </div>
                 `;
             default:
@@ -87,7 +93,7 @@
         selector.className = 'animation-selector';
         selector.innerHTML = `
             <div class="animation-selector-tab">
-                <span class="animation-selector-icon">⚙</span>
+                <span class="animation-selector-icon">Animations</span>
             </div>
             <div class="animation-selector-menu">
                 <div class="animation-selector-title">Choose Animation</div>
@@ -113,10 +119,51 @@
         `;
         document.body.appendChild(selector);
         
-        // Get current animation from config
-        const currentAnimation = window.ANIMATION_CONFIG?.name || 'animation1';
+        // Get current animation - check multiple sources with delay to ensure config is loaded
+        function detectCurrentAnimation() {
+            let currentAnimation = 'animation1';
+            
+            // First check window.ANIMATION_CONFIG (most reliable)
+            if (window.ANIMATION_CONFIG?.name) {
+                currentAnimation = window.ANIMATION_CONFIG.name;
+            }
+            // Then check which config script is loaded in the HTML
+            else {
+                const configScripts = document.querySelectorAll('script[src*="animation"][src*="config.js"]');
+                configScripts.forEach(script => {
+                    const src = script.getAttribute('src');
+                    if (src.includes('animation2')) currentAnimation = 'animation2';
+                    else if (src.includes('animation3')) currentAnimation = 'animation3';
+                    else if (src.includes('animation1')) currentAnimation = 'animation1';
+                });
+            }
+            
+            // Also check localStorage as fallback
+            const savedAnimation = localStorage.getItem('selectedAnimation');
+            if (savedAnimation && !window.ANIMATION_CONFIG) {
+                currentAnimation = `animation${savedAnimation}`;
+            }
+            
+            return currentAnimation;
+        }
         
-        // Mark current animation as active
+        // Wait a bit for config to load, then detect
+        let currentAnimation = detectCurrentAnimation();
+        
+        // Try again after a short delay in case config loads asynchronously
+        setTimeout(() => {
+            currentAnimation = detectCurrentAnimation();
+            const currentItem = selector.querySelector(`[data-animation="${currentAnimation}"]`);
+            if (currentItem) {
+                // Update active state
+                selector.querySelectorAll('.animation-selector-card').forEach(card => {
+                    card.classList.remove('active');
+                });
+                currentItem.classList.add('active');
+            }
+        }, 100);
+        
+        // Mark current animation as active immediately
         const currentItem = selector.querySelector(`[data-animation="${currentAnimation}"]`);
         if (currentItem) {
             currentItem.classList.add('active');
@@ -145,7 +192,9 @@
                 e.stopPropagation();
                 const animationId = card.getAttribute('data-animation');
                 
-                if (animationId === currentAnimation) {
+                // Get current animation again to check
+                const currentAnim = detectCurrentAnimation();
+                if (animationId === currentAnim) {
                     return; // Already selected
                 }
                 
@@ -167,43 +216,13 @@
         const animation = ANIMATIONS.find(a => a.id === animationId);
         if (!animation) return;
         
-        // Remove old animation CSS
-        const oldLinks = document.querySelectorAll('link[data-animation-stylesheet]');
-        oldLinks.forEach(link => link.remove());
+        // Save to localStorage
+        const animationNumber = animationId.replace('animation', '');
+        localStorage.setItem('selectedAnimation', animationNumber);
         
-        // Remove old animation scripts
-        const oldScripts = document.querySelectorAll('script[data-animation-script]');
-        oldScripts.forEach(script => script.remove());
-        
-        // Load new animation config
-        const configScript = document.createElement('script');
-        configScript.src = animation.config;
-        configScript.onload = () => {
-            const config = window.ANIMATION_CONFIG;
-            if (!config) return;
-            
-            // Load new CSS
-            const link = document.createElement('link');
-            link.rel = 'stylesheet';
-            link.href = config.css;
-            link.setAttribute('data-animation-stylesheet', 'true');
-            document.head.appendChild(link);
-            
-            // Load new scripts
-            config.scripts.forEach((src, index) => {
-                const script = document.createElement('script');
-                script.src = src;
-                script.defer = true;
-                script.setAttribute('data-animation-script', 'true');
-                document.head.appendChild(script);
-            });
-            
-            // Reload page after a short delay to ensure everything loads
-            setTimeout(() => {
-                window.location.reload();
-            }, 500);
-        };
-        document.head.appendChild(configScript);
+        // For file:// protocol, just reload the page with the new animation
+        // The HTML files will read from localStorage
+        window.location.reload();
     }
 })();
 

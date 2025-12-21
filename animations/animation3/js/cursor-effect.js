@@ -39,59 +39,49 @@
                 </svg>
             </div>
         `;
+        
         document.body.appendChild(cursor);
         
-        let mouseX = 0;
-        let mouseY = 0;
-        let cursorX = 0;
-        let cursorY = 0;
-        let isVisible = false;
+        // Make cursor visible
+        setTimeout(() => {
+            cursor.classList.add('visible');
+        }, 100);
         
         // Track mouse position
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
+        let textOffset = 0;
+        
         document.addEventListener('mousemove', (e) => {
             mouseX = e.clientX;
             mouseY = e.clientY;
-            if (!isVisible) {
-                cursor.classList.add('visible');
-                isVisible = true;
-            }
         });
         
-        // Hide cursor when mouse leaves window
-        document.addEventListener('mouseleave', () => {
-            cursor.classList.remove('visible');
-            isVisible = false;
-        });
-        
-        // Expose cursor position and radius for collision detection
-        window.customCursor = {
-            x: 0,
-            y: 0,
-            radius: 56, // Outer circle radius in pixels (70/200 * 160px)
-            element: cursor
-        };
-        
-        // Animate cursor position smoothly
+        // Smooth cursor animation
         function animateCursor() {
-            cursorX += (mouseX - cursorX) * 0.1;
-            cursorY += (mouseY - cursorY) * 0.1;
+            // Smooth interpolation for cursor position
+            const lerp = 0.15;
+            cursorX += (mouseX - cursorX) * lerp;
+            cursorY += (mouseY - cursorY) * lerp;
             
             cursor.style.left = cursorX + 'px';
             cursor.style.top = cursorY + 'px';
             
-            // Update exposed position
-            window.customCursor.x = cursorX;
-            window.customCursor.y = cursorY;
+            // Text rotation is now handled by CSS animation - no JavaScript needed
+            
+            // Expose cursor position and radius for collision detection
+            window.customCursor = {
+                x: cursorX,
+                y: cursorY,
+                radius: 56 // Outer circle radius in pixels (70 * 0.8 = 56, accounting for viewBox scaling)
+            };
             
             requestAnimationFrame(animateCursor);
         }
         
-        // Start animation
         animateCursor();
         
-        // Text rotation is now handled by CSS animation - no JavaScript needed
-        
-        // Hide default cursor on body
+        // Hide default cursor
         document.body.style.cursor = 'none';
     }
 })();

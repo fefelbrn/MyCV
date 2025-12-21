@@ -906,8 +906,18 @@
 }
 
 .cursor-text {
-    opacity: 1;
+    opacity: 1 !important;
     text-transform: uppercase;
+    transition: none !important;
+    /* Rotation animation - text never disappears */
+    /* Center rotation at 100,100 which is the center of the SVG viewBox */
+    transform-origin: 100px 100px;
+    animation: cursorSpin 6s linear infinite;
+}
+
+@keyframes cursorSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }
 
 .cursor-pointer {

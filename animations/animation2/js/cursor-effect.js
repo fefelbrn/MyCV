@@ -26,9 +26,9 @@
                     <circle class="cursor-ring-outer" cx="100" cy="100" r="70" fill="none" stroke="white" stroke-width="1"/>
                     <!-- Inner circle - white -->
                     <circle class="cursor-ring-inner" cx="100" cy="100" r="40" fill="none" stroke="white" stroke-width="1"/>
-                    <!-- Text between circles - repeated many times to ensure continuous visibility -->
+                    <!-- Text between circles - centered and will rotate via CSS -->
                     <text class="cursor-text" fill="white" font-size="8" font-family="Inter, sans-serif" font-weight="300" letter-spacing="0.15em">
-                        <textPath href="#${uniqueId}" startOffset="0%">
+                        <textPath href="#${uniqueId}" startOffset="50%" text-anchor="middle">
                             SCROLL DOWN • EXPLORE • SCROLL DOWN • EXPLORE • SCROLL DOWN • EXPLORE • SCROLL DOWN • EXPLORE • SCROLL DOWN • EXPLORE • SCROLL DOWN • EXPLORE • SCROLL DOWN • EXPLORE • SCROLL DOWN • EXPLORE • SCROLL DOWN • EXPLORE • SCROLL DOWN • EXPLORE • SCROLL DOWN • EXPLORE • SCROLL DOWN • EXPLORE • SCROLL DOWN • EXPLORE • SCROLL DOWN • EXPLORE • SCROLL DOWN • EXPLORE • SCROLL DOWN • EXPLORE • SCROLL DOWN • EXPLORE • SCROLL DOWN • EXPLORE • SCROLL DOWN • EXPLORE • SCROLL DOWN • EXPLORE • SCROLL DOWN • EXPLORE • SCROLL DOWN • EXPLORE • SCROLL DOWN • EXPLORE • SCROLL DOWN • EXPLORE • SCROLL DOWN • EXPLORE • SCROLL DOWN • EXPLORE
                         </textPath>
                     </text>
@@ -89,19 +89,7 @@
         // Start animation
         animateCursor();
         
-        // Animate text rotation around circle
-        const textPath = cursor.querySelector('textPath');
-        let textOffset = 0;
-        function animateText() {
-            textOffset += 0.03; // Slower rotation speed
-            // Use modulo to create continuous rotation without reset
-            textOffset = textOffset % 100;
-            if (textPath) {
-                textPath.setAttribute('startOffset', textOffset + '%');
-            }
-            requestAnimationFrame(animateText);
-        }
-        animateText();
+        // Text rotation is now handled by CSS animation - no JavaScript needed
         
         // Hide default cursor on body
         document.body.style.cursor = 'none';

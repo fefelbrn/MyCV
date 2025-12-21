@@ -24,7 +24,8 @@
                     css: 'animations/animation2/css/animation.css',
                     scripts: [
                         'animations/animation2/js/bubble-background.js',
-                        'animations/animation2/js/script.js'
+                        'animations/animation2/js/script.js',
+                        'animations/animation2/js/cursor-effect.js'
                     ]
                 };
                 // Load Three.js for animation 2
@@ -37,7 +38,8 @@
                     name: 'animation3',
                     css: 'animations/animation3/css/animation.css',
                     scripts: [
-                        'animations/animation3/js/script.js'
+                        'animations/animation3/js/script.js',
+                        'animations/animation3/js/cursor-effect.js'
                     ]
                 };
                 // Load Three.js for animation 3
@@ -53,7 +55,8 @@
                         'animations/animation1/js/script.js',
                         'animations/animation1/js/easter-eggs.js',
                         'animations/animation1/js/code-animation.js',
-                        'animations/animation1/js/cv-tab.js'
+                        'animations/animation1/js/cv-tab.js',
+                        'animations/animation1/js/cursor-effect.js'
                     ]
                 };
             }
@@ -83,6 +86,61 @@
     </script>
     <!-- Animation Selector -->
     <script src="js/animation-selector.js" defer></script>
+    <!-- Hide/show animation-specific elements based on selected animation -->
+    <script>
+        (function() {
+            function hideAnimation1Elements() {
+                const selectedAnimation = localStorage.getItem('selectedAnimation') || '1';
+                
+                // Elements specific to animation 1
+                const anim1Elements = [
+                    '.center-text',
+                    '.code-animation',
+                    '.rings-container',
+                    '.easter-egg-circle',
+                    '.loading-screen',
+                    '.cv-tab'
+                ];
+                
+                if (selectedAnimation !== '1') {
+                    // Hide animation 1 specific elements
+                    anim1Elements.forEach(selector => {
+                        const elements = document.querySelectorAll(selector);
+                        elements.forEach(el => {
+                            if (el) {
+                                el.style.display = 'none';
+                                el.style.visibility = 'hidden';
+                                el.style.opacity = '0';
+                            }
+                        });
+                    });
+                } else {
+                    // Show animation 1 elements
+                    anim1Elements.forEach(selector => {
+                        const elements = document.querySelectorAll(selector);
+                        elements.forEach(el => {
+                            if (el) {
+                                el.style.display = '';
+                                el.style.visibility = '';
+                                el.style.opacity = '';
+                            }
+                        });
+                    });
+                }
+            }
+            
+            // Run immediately
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', hideAnimation1Elements);
+            } else {
+                hideAnimation1Elements();
+            }
+            
+            // Also run after a short delay to catch any late-loading elements
+            setTimeout(hideAnimation1Elements, 100);
+            setTimeout(hideAnimation1Elements, 500);
+        })();
+    </script>
     <script src="js/cv-filter.js" defer></script>
     <script src="js/cv-search.js" defer></script>
     <script src="js/cv-tile-modal.js" defer></script>

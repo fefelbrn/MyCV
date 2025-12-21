@@ -48,8 +48,24 @@
         const container = document.createElement('div');
         container.className = 'text-3d-container';
 
-        const width = Math.max(400, Math.min(window.innerWidth, 1600));
-        const height = Math.max(300, Math.min(window.innerHeight, 1200));
+        // Responsive container size - ensure it always displays
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
+        
+        let width, height;
+        if (viewportWidth < 480) {
+            // Mobile: use full viewport but with better constraints
+            width = Math.max(viewportWidth * 0.98, Math.min(viewportWidth, 320));
+            height = Math.max(viewportHeight * 0.9, Math.min(viewportHeight, 280));
+        } else if (viewportWidth < 768) {
+            // Tablet: slightly smaller
+            width = Math.max(viewportWidth * 0.95, Math.min(viewportWidth, 450));
+            height = Math.max(viewportHeight * 0.85, Math.min(viewportHeight, 350));
+        } else {
+            // Desktop: original constraints
+            width = Math.max(400, Math.min(window.innerWidth, 1600));
+            height = Math.max(300, Math.min(window.innerHeight, 1200));
+        }
 
         scene = new THREE.Scene();
         scene.background = new THREE.Color(0x000000); // Black background
@@ -86,16 +102,41 @@
             new THREE.Color(0xffaa00), // Orange-Yellow
         ];
 
-        let yOffset = words.length * 0.9 + 0.5; // Start from top, slightly higher
+        // Responsive vertical spacing
+        const vw3 = window.innerWidth;
+        let wordSpacing = 1.8;
+        let initialOffset = words.length * 0.9 + 0.5;
+        
+        if (vw3 < 480) {
+            wordSpacing = 1.2; // Tighter spacing on mobile
+            initialOffset = words.length * 0.6 + 0.3;
+        } else if (vw3 < 768) {
+            wordSpacing = 1.5; // Medium spacing on tablet
+            initialOffset = words.length * 0.75 + 0.4;
+        }
+        
+        let yOffset = initialOffset;
         words.forEach((word, wordIndex) => {
-            yOffset -= 1.8; // Space between words
+            yOffset -= wordSpacing; // Space between words
             
             // Create each letter in the word
             word.split('').forEach((letter, letterIndex) => {
                 if (font) {
-                    // Calculate responsive letter size based on viewport width
+                    // Calculate responsive letter size based on viewport width - improved for small screens
+                    const vw = window.innerWidth;
                     const baseSize = 1.5;
-                    const responsiveSize = Math.min(baseSize, Math.max(0.6, baseSize * (window.innerWidth / 1200)));
+                    let responsiveSize;
+                    
+                    if (vw < 480) {
+                        // Mobile: smaller size, more aggressive scaling
+                        responsiveSize = Math.max(0.5, baseSize * (vw / 1200) * 0.85);
+                    } else if (vw < 768) {
+                        // Tablet: medium size
+                        responsiveSize = Math.max(0.6, baseSize * (vw / 1200) * 0.95);
+                    } else {
+                        // Desktop: original calculation
+                        responsiveSize = Math.min(baseSize, Math.max(0.6, baseSize * (vw / 1200)));
+                    }
                     
                     const textGeometry = new THREE.TextGeometry(letter, {
                         font: font,
@@ -157,8 +198,17 @@
                     const letterMesh = new THREE.Mesh(textGeometry, material);
                     
                     // Position letters with upward tilt and overlap (like in inspiration)
-                    const xOffset = (letterIndex - word.length / 2) * 1.1; // Increased spacing
-                    const tilt = 0.15; // Upward tilt from left to right
+                    // Responsive spacing based on viewport
+                    const vw2 = window.innerWidth;
+                    let spacingMultiplier = 1.1;
+                    if (vw2 < 480) {
+                        spacingMultiplier = 0.7; // Tighter spacing on mobile
+                    } else if (vw2 < 768) {
+                        spacingMultiplier = 0.85; // Medium spacing on tablet
+                    }
+                    
+                    const xOffset = (letterIndex - word.length / 2) * spacingMultiplier;
+                    const tilt = vw2 < 480 ? 0.08 : 0.15; // Less tilt on mobile
                     letterMesh.position.set(
                         xOffset + (yOffset * tilt), // Tilt effect
                         yOffset + (xOffset * tilt * 0.2),
@@ -206,13 +256,30 @@
             document.body.appendChild(container);
         }
 
-        // Handle resize
+        // Handle resize with debounce for better performance
+        let resizeTimeout;
         window.addEventListener('resize', () => {
-            const newWidth = Math.max(400, Math.min(window.innerWidth, 1600));
-            const newHeight = Math.max(300, Math.min(window.innerHeight, 1200));
-            camera.aspect = newWidth / newHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(newWidth, newHeight);
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                const vw4 = window.innerWidth;
+                const vh4 = window.innerHeight;
+                
+                let newWidth, newHeight;
+                if (vw4 < 480) {
+                    newWidth = Math.max(vw4 * 0.98, 320);
+                    newHeight = Math.max(vh4 * 0.9, 280);
+                } else if (vw4 < 768) {
+                    newWidth = Math.max(vw4 * 0.95, 450);
+                    newHeight = Math.max(vh4 * 0.85, 350);
+                } else {
+                    newWidth = Math.max(400, Math.min(window.innerWidth, 1600));
+                    newHeight = Math.max(300, Math.min(window.innerHeight, 1200));
+                }
+                
+                camera.aspect = newWidth / newHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(newWidth, newHeight);
+            }, 150);
         });
         
         // Mouse interaction for collision detection
