@@ -1,4 +1,4 @@
-// Animation Selector - Allows switching between different animations
+// Animation Selector - allows switching between different animations
 (function() {
     'use strict';
     
@@ -8,9 +8,9 @@
             id: 'animation1',
             name: 'Terminal',
             description: 'Code style with terminal loading',
-            preview: 'terminal', // Preview type for CSS styling
+            preview: 'terminal', // preview type for CSS styling
             config: 'animations/animation1/config.js',
-            color: '#27c93f' // Terminal green
+            color: '#27c93f' // terminal green
         },
         {
             id: 'animation2',

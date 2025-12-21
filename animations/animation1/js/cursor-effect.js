@@ -67,7 +67,7 @@
         window.customCursor = {
             x: 0,
             y: 0,
-            radius: 56, // Outer circle radius in pixels (70/200 * 160px)
+            radius: 56, // outer circle radius in pixels (70/200 * 160px)
             element: cursor
         };
         

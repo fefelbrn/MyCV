@@ -79,4 +79,3 @@ Features:
 - **Dynamic movement**: Letters float and move with collision detection
 - **Interactive cursor**: Custom cursor with collision physics
 - **Color blending**: Semi-transparent letters create color blends when overlapping
-

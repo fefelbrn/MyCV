@@ -73,7 +73,7 @@
             window.customCursor = {
                 x: cursorX,
                 y: cursorY,
-                radius: 56 // Outer circle radius in pixels (70 * 0.8 = 56, accounting for viewBox scaling)
+                radius: 56 // outer circle radius in pixels (70 * 0.8 = 56, accounting for viewBox scaling)
             };
             
             requestAnimationFrame(animateCursor);

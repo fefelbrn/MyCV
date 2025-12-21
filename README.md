@@ -2,16 +2,16 @@
 
 Interactive professional portfolio with modern animations and visual effects.
 
-## 🚀 Features
+## Features
 
-- **Interactive interface** with smooth animations
-- **Loading screen** terminal-style with network graphs
-- **Spy-style code animations**
-- **Interactive easter eggs**
-- **CV tab** to access the curriculum vitae
-- **Responsive and modern design**
+- Interactive interface with smooth animations
+- Terminal-style loading screen with network graphs
+- Spy-style code animations
+- Interactive easter eggs
+- CV tab to access the curriculum vitae
+- Responsive and modern design
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 MyCV/
@@ -30,13 +30,13 @@ MyCV/
         └── static.yml  # GitHub Pages workflow
 ```
 
-## 🛠️ Technologies Used
+## Technologies Used
 
 - HTML5
 - CSS3 (animations, transitions, 3D transforms)
 - JavaScript (Vanilla JS)
 
-## 📝 Usage
+## Usage
 
 1. Clone the repository:
 ```bash
@@ -47,13 +47,11 @@ git clone https://github.com/fefelbrn/MyCV.git
 
 3. The site is also available via GitHub Pages
 
-## 🔗 Links
+## Links
 
 - **LinkedIn** : [linkedin.com/in/feliz-luberne/](https://www.linkedin.com/in/feliz-luberne/)
 - **Email** : fefelbr@gmail.com
 
-## 📄 License
+## License
 
 This project is personal and private.
-
-
