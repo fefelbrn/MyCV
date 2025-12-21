@@ -65,7 +65,7 @@ body {
     flex-direction: column;
 }
 
-/* Bannière */
+/* Banner */
 .cv-banner {
     width: 100%;
     max-width: 1400px;
@@ -251,7 +251,7 @@ body {
     font-size: 1rem;
 }
 
-/* Compétences avec barres */
+/* Skills with bars */
 .cv-skills-list {
     display: flex;
     flex-direction: column;
@@ -352,7 +352,7 @@ body {
     align-items: center;
 }
 
-/* Wrapper de recherche avec icône */
+/* Search wrapper with icon */
 .cv-search-wrapper {
     position: relative;
     width: 100%;
@@ -361,7 +361,7 @@ body {
     align-items: center;
 }
 
-/* Icône de loupe */
+/* Search icon */
 .cv-search-icon {
     position: absolute;
     left: 1rem;
@@ -408,7 +408,7 @@ body {
     color: #4a90e2;
 }
 
-/* Autocomplétion */
+/* Autocomplete */
 .cv-search-autocomplete {
     position: absolute;
     top: calc(100% + 0.5rem);
@@ -657,10 +657,10 @@ body {
     line-height: 1.6;
     margin: 0;
     flex-grow: 1;
-    display: none; /* Caché par défaut dans les tuiles */
+    display: none; /* Hidden by default in tiles */
 }
 
-/* Couleurs par type de tuile */
+/* Colors by tile type */
 .cv-tile-work {
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.75) 0%, rgba(74, 144, 226, 0.02) 100%);
 }
@@ -801,7 +801,7 @@ body {
     box-shadow: 0 2px 8px rgba(231, 76, 60, 0.2);
 }
 
-/* Modal pour les détails des tuiles */
+/* Modal for tile details */
 .cv-tile-modal {
     position: fixed;
     top: 0;

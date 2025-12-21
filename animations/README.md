@@ -1,42 +1,46 @@
-# Système d'Animations
+# Animation System
 
-Ce dossier contient toutes les animations du site. Chaque animation est isolée dans son propre dossier.
+This folder contains all the site animations. Each animation is isolated in its own folder.
 
 ## Structure
 
 ```
 animations/
-├── animation1/          # Animation actuelle (Terminal & Code Style)
+├── animation1/          # Current animation (Terminal & Code Style)
 │   ├── css/
-│   │   └── animation.css    # Styles CSS de l'animation
+│   │   └── animation.css    # Animation CSS styles
 │   ├── js/
-│   │   ├── script.js         # Script principal (frame borders)
-│   │   ├── cv-tab.js         # Gestion de la languette CV
-│   │   ├── code-animation.js # Animation de code style espionnage
+│   │   ├── script.js         # Main script (frame borders)
+│   │   ├── cv-tab.js         # CV tab management
+│   │   ├── code-animation.js # Spy-style code animation
 │   │   └── easter-eggs.js    # Easter eggs
-│   └── config.js             # Configuration de l'animation
-└── animation2/          # Future animation (à créer)
+│   └── config.js             # Animation configuration
+├── animation2/          # 3D Text in Glass Torus
+│   ├── css/
+│   ├── js/
+│   └── config.js
+└── animation3/          # Gradient Text Animation
     ├── css/
     ├── js/
     └── config.js
 ```
 
-## Changer d'animation
+## Changing Animation
 
-Pour changer d'animation, modifiez simplement le chemin dans `index.html` :
+To change animation, simply modify the path in `index.html`:
 
 ```html
-<!-- Ligne 13 dans index.html -->
+<!-- Line 13 in index.html -->
 <script src="animations/animation1/config.js"></script>
 ```
 
-Changez `animation1` par `animation2` (ou le nom de votre animation).
+Change `animation1` to `animation2` (or your animation name).
 
-## Créer une nouvelle animation
+## Creating a New Animation
 
-1. Créez un nouveau dossier : `animations/animation2/`
-2. Créez les sous-dossiers : `css/` et `js/`
-3. Créez `config.js` avec la structure :
+1. Create a new folder: `animations/animation2/`
+2. Create subfolders: `css/` and `js/`
+3. Create `config.js` with the structure:
    ```javascript
    const ANIMATION_CONFIG = {
        name: 'animation2',
@@ -47,16 +51,32 @@ Changez `animation1` par `animation2` (ou le nom de votre animation).
        ]
    };
    ```
-4. Ajoutez vos fichiers CSS et JS dans les dossiers respectifs
-5. Modifiez `index.html` pour pointer vers votre nouvelle animation
+4. Add your CSS and JS files in the respective folders
+5. Modify `index.html` to point to your new animation
 
 ## Animation 1 - Terminal & Code Style
 
-L'animation actuelle comprend :
-- **Écran d'accueil** : Texte "work" au centre avec animations de code
-- **Languette CV** : Glisser vers le haut pour ouvrir le CV
-- **Écran de chargement** : Terminal style avec barre de progression
-- **Animations de code** : Code style espionnage en haut à droite et bas à gauche
-- **Cercles 3D** : Animation de cercles rotatifs
-- **Easter eggs** : Cercle en haut à gauche et bug dans le terminal
+The current animation includes:
+- **Home screen**: "work" text in center with code animations
+- **CV tab**: Drag up to open the CV
+- **Loading screen**: Terminal-style with progress bar
+- **Code animations**: Spy-style code in top-right and bottom-left
+- **3D circles**: Rotating circle animations
+- **Easter eggs**: Circle in top-left and bug in terminal
+
+## Animation 2 - 3D Text in Glass Torus
+
+Features:
+- **3D metallic text**: "Work Experience" rendered in 3D with chrome effect
+- **Glass torus**: Transparent glass ring surrounding the text
+- **Bubble background**: Animated gradient background with moving bubbles
+- **Interactive cursor**: Custom cursor with scroll indicator
+
+## Animation 3 - Gradient Text Animation
+
+Features:
+- **Gradient text**: "FELIZ LUBERNE" with vibrant gradient colors
+- **Dynamic movement**: Letters float and move with collision detection
+- **Interactive cursor**: Custom cursor with collision physics
+- **Color blending**: Semi-transparent letters create color blends when overlapping
 

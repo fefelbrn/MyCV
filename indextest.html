@@ -3,82 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Féliz's Resume</title>
+    <title>Féliz's Resume - Animation 2 Test</title>
     <link rel="icon" type="image/png" href="images/Favicon_V1.png">
     <link rel="shortcut icon" type="image/png" href="images/Favicon_V1.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
-    <!-- Animation Configuration - Loads based on user preference -->
+    <!-- Three.js for 3D rendering -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- Animation Configuration - Animation 2: 3D Text in Glass Torus -->
+    <script src="animations/animation2/config.js"></script>
     <script>
-        // Load animation based on localStorage preference or default to animation1
+        // Load animation CSS and scripts dynamically
         (function() {
-            const selectedAnimation = localStorage.getItem('selectedAnimation') || '1';
-            let configPath, defaultConfig;
-            
-            if (selectedAnimation === '2') {
-                configPath = 'animations/animation2/config.js';
-                defaultConfig = {
-                    name: 'animation2',
-                    css: 'animations/animation2/css/animation.css',
-                    scripts: [
-                        'animations/animation2/js/bubble-background.js',
-                        'animations/animation2/js/script.js'
-                    ]
-                };
-                // Load Three.js for animation 2
-                const threeScript = document.createElement('script');
-                threeScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
-                document.head.appendChild(threeScript);
-            } else if (selectedAnimation === '3') {
-                configPath = 'animations/animation3/config.js';
-                defaultConfig = {
-                    name: 'animation3',
-                    css: 'animations/animation3/css/animation.css',
-                    scripts: [
-                        'animations/animation3/js/script.js'
-                    ]
-                };
-                // Load Three.js for animation 3
-                const threeScript = document.createElement('script');
-                threeScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
-                document.head.appendChild(threeScript);
-            } else {
-                configPath = 'animations/animation1/config.js';
-                defaultConfig = {
-                    name: 'animation1',
-                    css: 'animations/animation1/css/animation.css',
-                    scripts: [
-                        'animations/animation1/js/script.js',
-                        'animations/animation1/js/easter-eggs.js',
-                        'animations/animation1/js/code-animation.js',
-                        'animations/animation1/js/cv-tab.js'
-                    ]
-                };
-            }
-            
-            // Load config
-            const configScript = document.createElement('script');
-            configScript.src = configPath;
-            configScript.onload = function() {
-                const config = window.ANIMATION_CONFIG || defaultConfig;
-                
-                // Load CSS
-                const link = document.createElement('link');
-                link.rel = 'stylesheet';
-                link.href = config.css;
-                document.head.appendChild(link);
-                
-                // Load scripts
-                config.scripts.forEach((src, index) => {
-                    const script = document.createElement('script');
-                    script.src = src;
-                    script.defer = true;
-                    document.head.appendChild(script);
-                });
+            const config = window.ANIMATION_CONFIG || {
+                name: 'animation2',
+                css: 'animations/animation2/css/animation.css',
+                scripts: [
+                    'animations/animation2/js/script.js'
+                ]
             };
-            document.head.appendChild(configScript);
+            
+            // Load CSS
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = config.css;
+            document.head.appendChild(link);
+            
+            // Load scripts
+            config.scripts.forEach((src, index) => {
+                const script = document.createElement('script');
+                script.src = src;
+                script.defer = true;
+                document.head.appendChild(script);
+            });
         })();
     </script>
     <!-- Animation Selector -->
@@ -90,102 +49,9 @@
 <body>
     <!-- Layer 1: Site content (can move/zoom) -->
     <div class="content-layer">
-        <!-- Texte central -->
-        <div class="center-text">
-            <span class="letter-w">w</span>
-            <span class="letter-o">o</span>
-            <span class="letter-r">r</span>
-            <span class="letter-k">k</span>
-        </div>
-        
-        <!-- Animation code style espionnage -->
-        <div class="code-animation code-animation-top-right" id="codeAnimation"></div>
-        <div class="code-animation code-animation-bottom-left" id="codeAnimationBottomLeft"></div>
-        
-        <!-- Animation cercles 3D -->
-        <div class="rings-container">
-            <div class="ring ring-1"></div>
-            <div class="ring ring-2"></div>
-            <div class="ring ring-3"></div>
-        </div>
-        
-        <a href="#" class="easter-egg-circle" id="easterEgg">
-            <span class="easter-egg-content"></span>
-        </a>
-        
-        <!-- Languette CV -->
-        <div class="cv-tab" id="cvTab">
-            <div class="cv-tab-handle">
-                <span class="cv-arrow"></span>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Loading screen -->
-    <div class="loading-screen" id="loadingScreen">
-        <div class="loading-terminal">
-            <div class="terminal-header">
-                <div class="terminal-buttons">
-                    <span class="terminal-button terminal-button-red"></span>
-                    <span class="terminal-button terminal-button-yellow"></span>
-                    <span class="terminal-button terminal-button-green"></span>
-                </div>
-                <div class="terminal-title">system.exe</div>
-                <a href="#" class="terminal-bug" id="terminalBug" title="🐛 Bug">
-                    <span class="bug-body"></span>
-                    <span class="bug-antenna bug-antenna-left"></span>
-                    <span class="bug-antenna bug-antenna-right"></span>
-                    <span class="bug-leg bug-leg-1"></span>
-                    <span class="bug-leg bug-leg-2"></span>
-                    <span class="bug-leg bug-leg-3"></span>
-                    <span class="bug-leg bug-leg-4"></span>
-                </a>
-            </div>
-            <div class="terminal-body">
-                <div class="terminal-line">
-                    <span class="terminal-prompt">$</span>
-                    <span class="terminal-text">Initializing system...</span>
-                </div>
-                <div class="terminal-line">
-                    <span class="terminal-prompt">$</span>
-                    <span class="terminal-text">Loading modules...</span>
-                </div>
-                <div class="terminal-line">
-                    <span class="terminal-prompt">$</span>
-                    <span class="terminal-text">Preparing data...</span>
-                </div>
-                <div class="packets-container" id="packetsContainer"></div>
-                <div class="network-graphs">
-                    <div class="network-graph-container">
-                        <div class="network-graph-header">
-                            <span class="network-label">↓ In:</span>
-                            <span class="network-value" id="networkIn">0.0 Mo/s</span>
-                        </div>
-                        <div class="network-graph-box" id="networkInGraph">
-                            <svg class="network-graph-svg" viewBox="0 0 200 60" preserveAspectRatio="none">
-                                <polyline class="network-graph-line network-graph-line-in" points="" fill="none" stroke="#ffffff" stroke-width="1.5"/>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="network-graph-container">
-                        <div class="network-graph-header">
-                            <span class="network-label">↑ Out:</span>
-                            <span class="network-value" id="networkOut">0.0 Mo/s</span>
-                        </div>
-                        <div class="network-graph-box network-graph-box-out" id="networkOutGraph">
-                            <svg class="network-graph-svg" viewBox="0 0 200 60" preserveAspectRatio="none">
-                                <polyline class="network-graph-line network-graph-line-out" points="" fill="none" stroke="#ffffff" stroke-width="1.5"/>
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-                <div class="loading-bar-container">
-                    <div class="loading-bar" id="loadingBar">
-                        <div class="loading-bar-fill" id="loadingBarFill"></div>
-                    </div>
-                    <div class="loading-percentage" id="loadingPercentage">0%</div>
-                </div>
-            </div>
+        <!-- Texte central (hidden, replaced by 3D text) -->
+        <div class="center-text" style="display: none;">
+            <span>Féliz Luberne</span>
         </div>
     </div>
     

@@ -1,4 +1,4 @@
-// CV Tags - Système de tags pour filtrer les tuiles
+// CV Tags - Tag system for filtering tiles
 (function() {
     'use strict';
     
@@ -7,7 +7,7 @@
     
     if (!tiles.length || !tagsContainer) return;
     
-    // Collecter tous les tags uniques depuis les tuiles
+    // Collect all unique tags from tiles
     const allTags = new Set();
     tiles.forEach(tile => {
         const tags = tile.getAttribute('data-tags');
@@ -20,7 +20,7 @@
         }
     });
     
-    // Mapper les tags vers des noms affichables
+    // Map tags to displayable names
     const tagDisplayNames = {
         'cartier': 'Cartier',
         'edf': 'EDF',
@@ -39,7 +39,7 @@
         'datacamp': 'DataCamp'
     };
     
-    // Créer les boutons de tags
+    // Create tag buttons
     const sortedTags = Array.from(allTags).sort();
     sortedTags.forEach(tag => {
         const tagButton = document.createElement('button');
@@ -49,7 +49,7 @@
         tagsContainer.appendChild(tagButton);
     });
     
-    // Gestion des tags actifs
+    // Active tags management
     let activeTags = new Set();
     
     function combineFilters(filterType) {
@@ -57,13 +57,13 @@
             const tileType = tile.getAttribute('data-type');
             const tileTags = tile.getAttribute('data-tags');
             
-            // Vérifier le type
+            // Check type
             let matchesType = true;
             if (filterType !== 'all') {
                 matchesType = tileType === filterType;
             }
             
-            // Vérifier les tags
+            // Check tags
             let matchesTags = true;
             if (activeTags.size > 0 && tileTags) {
                 const tileTagsArray = tileTags.split(' ').map(t => t.trim());
@@ -72,7 +72,7 @@
                 );
             }
             
-            // Afficher si les deux conditions sont remplies
+            // Show if both conditions are met
             if (matchesType && matchesTags) {
                 tile.style.display = 'flex';
                 tile.style.animation = 'fadeIn 0.4s ease';
@@ -83,14 +83,14 @@
     }
     
     function updateFilter() {
-        // Obtenir le filtre de type actif
+        // Get active type filter
         const activeFilterBtn = document.querySelector('.cv-filter-btn.active');
         const filterType = activeFilterBtn ? activeFilterBtn.getAttribute('data-filter') : 'all';
         
-        // Combiner les filtres
+        // Combine filters
         combineFilters(filterType);
         
-        // Mettre à jour l'état visuel des boutons de tags
+        // Update visual state of tag buttons
         document.querySelectorAll('.cv-tag-btn').forEach(btn => {
             const tag = btn.getAttribute('data-tag');
             if (activeTags.has(tag)) {
@@ -101,12 +101,12 @@
         });
     }
     
-    // Gérer les clics sur les tags
+    // Handle tag clicks
     tagsContainer.addEventListener('click', function(e) {
         if (e.target.classList.contains('cv-tag-btn')) {
             const tag = e.target.getAttribute('data-tag');
             
-            // Toggle le tag
+            // Toggle tag
             if (activeTags.has(tag)) {
                 activeTags.delete(tag);
             } else {
@@ -117,11 +117,11 @@
         }
     });
     
-    // Écouter les changements de filtre de type pour combiner avec les tags
+    // Listen to type filter changes to combine with tags
     const filterButtons = document.querySelectorAll('.cv-filter-btn');
     filterButtons.forEach(btn => {
         btn.addEventListener('click', function() {
-            // Attendre que le filtre de type soit appliqué, puis combiner avec les tags
+            // Wait for type filter to be applied, then combine with tags
             setTimeout(() => {
                 const activeFilter = document.querySelector('.cv-filter-btn.active');
                 if (activeFilter) {
@@ -132,7 +132,7 @@
         });
     });
     
-    // Exposer la fonction pour être utilisée par cv-filter.js
+    // Expose function to be used by cv-filter.js
     window.cvTagsFilter = {
         combineFilters: combineFilters,
         getActiveTags: () => activeTags

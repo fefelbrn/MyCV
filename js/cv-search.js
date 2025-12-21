@@ -1,4 +1,4 @@
-// CV Search - Barre de recherche avec autocomplétion pour les tags
+// CV Search - Search bar with autocompletion for tags
 (function() {
     'use strict';
     
@@ -8,7 +8,7 @@
     
     if (!tiles.length || !searchInput || !autocompleteContainer) return;
     
-    // Collecter tous les tags uniques depuis les tuiles
+    // Collect all unique tags from tiles
     const allTags = new Set();
     tiles.forEach(tile => {
         const tags = tile.getAttribute('data-tags');
@@ -21,7 +21,7 @@
         }
     });
     
-    // Mapper les tags vers des noms affichables
+    // Map tags to displayable names
     const tagDisplayNames = {
         'cartier': 'Cartier',
         'edf': 'EDF',
@@ -40,7 +40,7 @@
         'datacamp': 'DataCamp'
     };
     
-    // Créer un tableau de tags avec leurs noms d'affichage
+    // Create array of tags with their display names
     const tagsArray = Array.from(allTags).map(tag => ({
         id: tag,
         display: tagDisplayNames[tag] || tag.charAt(0).toUpperCase() + tag.slice(1).replace(/-/g, ' ')
@@ -49,7 +49,7 @@
     let activeSearchTerm = '';
     let selectedTagIndex = -1;
     
-    // Fonction pour filtrer les suggestions
+    // Function to filter suggestions
     function getSuggestions(query) {
         if (!query || query.trim().length === 0) {
             return [];
@@ -58,10 +58,10 @@
         return tagsArray.filter(tag => 
             tag.display.toLowerCase().includes(lowerQuery) || 
             tag.id.toLowerCase().includes(lowerQuery)
-        ).slice(0, 8); // Limiter à 8 suggestions
+        ).slice(0, 8); // Limit to 8 suggestions
     }
     
-    // Fonction pour afficher les suggestions
+    // Function to display suggestions
     function showSuggestions(suggestions) {
         if (suggestions.length === 0) {
             autocompleteContainer.innerHTML = '';
@@ -83,33 +83,33 @@
         autocompleteContainer.classList.add('active');
     }
     
-    // Fonction pour appliquer le filtre de recherche
+    // Function to apply search filter
     function applySearchFilter() {
         const searchTerm = searchInput.value.trim().toLowerCase();
         activeSearchTerm = searchTerm;
         
-        // Obtenir le filtre de type actif
+        // Get active type filter
         const activeFilterBtn = document.querySelector('.cv-filter-btn.active');
         const filterType = activeFilterBtn ? activeFilterBtn.getAttribute('data-filter') : 'all';
         
-        // Trouver les tags correspondants
+        // Find matching tags
         const matchingTags = searchTerm ? tagsArray.filter(tag => 
             tag.display.toLowerCase().includes(searchTerm) || 
             tag.id.toLowerCase().includes(searchTerm)
         ).map(tag => tag.id) : [];
         
-        // Filtrer les tuiles
+        // Filter tiles
         tiles.forEach(tile => {
             const tileType = tile.getAttribute('data-type');
             const tileTags = tile.getAttribute('data-tags');
             
-            // Vérifier le type
+            // Check type
             let matchesType = true;
             if (filterType !== 'all') {
                 matchesType = tileType === filterType;
             }
             
-            // Vérifier la recherche
+            // Check search
             let matchesSearch = true;
             if (searchTerm && matchingTags.length > 0) {
                 if (tileTags) {
@@ -119,11 +119,11 @@
                     matchesSearch = false;
                 }
             } else if (searchTerm && matchingTags.length === 0) {
-                // Si on cherche quelque chose mais qu'aucun tag ne correspond, cacher toutes les tuiles
+                // If searching but no tags match, hide all tiles
                 matchesSearch = false;
             }
             
-            // Afficher si les deux conditions sont remplies
+            // Show if both conditions are met
             if (matchesType && matchesSearch) {
                 tile.style.display = 'flex';
                 tile.style.animation = 'fadeIn 0.4s ease';
@@ -133,7 +133,7 @@
         });
     }
     
-    // Gérer la saisie dans la barre de recherche
+    // Handle search bar input
     searchInput.addEventListener('input', function() {
         const query = this.value.trim();
         const suggestions = getSuggestions(query);
@@ -142,7 +142,7 @@
         applySearchFilter();
     });
     
-    // Gérer les clics sur les suggestions
+    // Handle suggestion clicks
     autocompleteContainer.addEventListener('click', function(e) {
         if (e.target.classList.contains('cv-search-suggestion')) {
             const tag = e.target.getAttribute('data-tag');
@@ -153,7 +153,7 @@
         }
     });
     
-    // Gérer la navigation au clavier
+    // Handle keyboard navigation
     searchInput.addEventListener('keydown', function(e) {
         const suggestions = Array.from(autocompleteContainer.querySelectorAll('.cv-search-suggestion'));
         
@@ -203,7 +203,7 @@
         }
     });
     
-    // Fermer l'autocomplétion quand on clique ailleurs
+    // Close autocomplete when clicking elsewhere
     document.addEventListener('click', function(e) {
         if (!searchInput.contains(e.target) && !autocompleteContainer.contains(e.target)) {
             autocompleteContainer.classList.remove('active');
@@ -211,7 +211,7 @@
         }
     });
     
-    // Écouter les changements de filtre de type pour réappliquer la recherche
+    // Listen to type filter changes to reapply search
     const filterButtons = document.querySelectorAll('.cv-filter-btn');
     filterButtons.forEach(btn => {
         btn.addEventListener('click', function() {
@@ -221,7 +221,7 @@
         });
     });
     
-    // Exposer la fonction pour être utilisée par cv-filter.js
+    // Expose function to be used by cv-filter.js
     window.cvSearchFilter = {
         applySearchFilter: applySearchFilter
     };

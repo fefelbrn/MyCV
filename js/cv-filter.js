@@ -1,4 +1,4 @@
-// CV Filter - Filtrage des tuiles par type
+// CV Filter - Filter tiles by type
 (function() {
     'use strict';
     
@@ -8,11 +8,11 @@
     if (!filterButtons.length || !tiles.length) return;
     
     function filterTiles(filterType) {
-        // Combiner avec le filtre de tags si disponible
+        // Combine with tag filter if available
         if (window.cvTagsFilter) {
             window.cvTagsFilter.combineFilters(filterType);
         } else {
-            // Fallback si le système de tags n'est pas encore chargé
+            // Fallback if tag system is not yet loaded
             tiles.forEach(tile => {
                 if (filterType === 'all') {
                     tile.style.display = 'flex';
@@ -32,13 +32,13 @@
     
     filterButtons.forEach(button => {
         button.addEventListener('click', function() {
-            // Retirer la classe active de tous les boutons
+            // Remove active class from all buttons
             filterButtons.forEach(btn => btn.classList.remove('active'));
             
-            // Ajouter la classe active au bouton cliqué
+            // Add active class to clicked button
             this.classList.add('active');
             
-            // Filtrer les tuiles
+            // Filter tiles
             const filterType = this.getAttribute('data-filter');
             filterTiles(filterType);
         });
