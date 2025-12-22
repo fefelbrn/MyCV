@@ -100,8 +100,8 @@
         
         // Smooth cursor animation
         function animateCursor() {
-            // Smooth interpolation for cursor position
-            const lerp = 0.15;
+            // Smooth interpolation for cursor position - increased for better responsiveness
+            const lerp = 0.35;
             cursorX += (mouseX - cursorX) * lerp;
             cursorY += (mouseY - cursorY) * lerp;
             
@@ -114,7 +114,7 @@
             window.customCursor = {
                 x: cursorX,
                 y: cursorY,
-                radius: 56 // outer circle radius in pixels (70 * 0.8 = 56, accounting for viewBox scaling)
+                radius: 42 // outer circle radius in pixels (70/200 * 120px = 42)
             };
             
             requestAnimationFrame(animateCursor);

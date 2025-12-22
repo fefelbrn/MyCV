@@ -103,14 +103,14 @@
         window.customCursor = {
             x: 0,
             y: 0,
-            radius: 56, // outer circle radius in pixels (70/200 * 160px)
+            radius: 42, // outer circle radius in pixels (70/200 * 120px)
             element: cursor
         };
         
         // Animate cursor position smoothly
         function animateCursor() {
-            cursorX += (mouseX - cursorX) * 0.1;
-            cursorY += (mouseY - cursorY) * 0.1;
+            cursorX += (mouseX - cursorX) * 0.35;
+            cursorY += (mouseY - cursorY) * 0.35;
             
             cursor.style.left = cursorX + 'px';
             cursor.style.top = cursorY + 'px';
