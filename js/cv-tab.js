@@ -267,6 +267,15 @@
                             loadingScreen.classList.remove('visible');
                             if (cvPage) {
                                 cvPage.classList.add('visible');
+                                
+                                // Hide animation selector when CV page is visible
+                                const animationSelector = document.querySelector('.animation-selector');
+                                if (animationSelector) {
+                                    animationSelector.style.display = 'none';
+                                    animationSelector.style.visibility = 'hidden';
+                                    animationSelector.style.opacity = '0';
+                                    animationSelector.style.pointerEvents = 'none';
+                                }
                             }
                         }, 500);
                     }
@@ -314,6 +323,15 @@
     cvCloseBtn.addEventListener('click', function() {
         // Hide CV page
         cvPage.classList.remove('visible');
+        
+        // Show animation selector again
+        const animationSelector = document.querySelector('.animation-selector');
+        if (animationSelector) {
+            animationSelector.style.display = '';
+            animationSelector.style.visibility = '';
+            animationSelector.style.opacity = '';
+            animationSelector.style.pointerEvents = '';
+        }
         
         // Reset CV tab position and visibility
         if (cvTab) {

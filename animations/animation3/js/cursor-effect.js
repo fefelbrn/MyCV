@@ -10,6 +10,12 @@
     }
     
     function init() {
+        // Check if CV page is visible - if so, don't activate custom cursor
+        function isCVPageVisible() {
+            const cvPage = document.getElementById('cvPage');
+            return cvPage && cvPage.classList.contains('visible');
+        }
+        
         // Generate unique ID for this cursor instance
         const uniqueId = 'cursor-path-' + Math.random().toString(36).substr(2, 9);
         
@@ -42,20 +48,55 @@
         
         document.body.appendChild(cursor);
         
-        // Make cursor visible
-        setTimeout(() => {
-            cursor.classList.add('visible');
-        }, 100);
-        
         // Track mouse position
         let mouseX = 0, mouseY = 0;
         let cursorX = 0, cursorY = 0;
-        let textOffset = 0;
+        let isVisible = false;
+        
+        // Function to update cursor visibility based on CV page state
+        function updateCursorState() {
+            if (isCVPageVisible()) {
+                // CV page is visible - hide custom cursor and show default cursor
+                cursor.classList.remove('visible');
+                document.body.style.cursor = '';
+            } else {
+                // CV page is not visible - show custom cursor and hide default cursor
+                if (isVisible) {
+                    cursor.classList.add('visible');
+                }
+                document.body.style.cursor = 'none';
+            }
+        }
         
         document.addEventListener('mousemove', (e) => {
             mouseX = e.clientX;
             mouseY = e.clientY;
+            if (!isCVPageVisible() && !isVisible) {
+                cursor.classList.add('visible');
+                isVisible = true;
+            }
         });
+        
+        // Hide cursor when mouse leaves window
+        document.addEventListener('mouseleave', () => {
+            cursor.classList.remove('visible');
+            isVisible = false;
+        });
+        
+        // Watch for CV page visibility changes
+        const cvPage = document.getElementById('cvPage');
+        if (cvPage) {
+            const observer = new MutationObserver(() => {
+                updateCursorState();
+            });
+            observer.observe(cvPage, {
+                attributes: true,
+                attributeFilter: ['class']
+            });
+        }
+        
+        // Initial state check
+        updateCursorState();
         
         // Smooth cursor animation
         function animateCursor() {
@@ -80,9 +121,6 @@
         }
         
         animateCursor();
-        
-        // Hide default cursor
-        document.body.style.cursor = 'none';
     }
 })();
 

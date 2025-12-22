@@ -144,6 +144,7 @@
     <script src="js/cv-filter.js" defer></script>
     <script src="js/cv-search.js" defer></script>
     <script src="js/cv-tile-modal.js" defer></script>
+    <script src="js/cv-scroll-header.js" defer></script>
 </head>
 <body>
     <!-- Layer 1: Site content (can move/zoom) -->
@@ -253,31 +254,35 @@
         </button>
         <div class="cv-dashboard">
             <!-- Header with photo and menu -->
-            <header class="cv-banner">
-                <div class="banner-profile">
-                    <img src="images/profile_pic.jpg" alt="Féliz Luberne" class="banner-profile-image">
-                </div>
-                <!-- Filter menu -->
-                <nav class="cv-filter-menu">
-                    <button class="cv-filter-btn active" data-filter="all">Tout</button>
-                    <button class="cv-filter-btn" data-filter="work">Expériences Pro</button>
-                    <button class="cv-filter-btn" data-filter="education">Formations</button>
-                    <button class="cv-filter-btn" data-filter="hackathon">Hackathons</button>
-                    <button class="cv-filter-btn" data-filter="certification">Certifications</button>
-                    <button class="cv-filter-btn" data-filter="association">Associations</button>
-                </nav>
-                <div class="cv-search-container">
-                    <div class="cv-search-wrapper">
-                        <svg class="cv-search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                        <input type="text" 
-                               class="cv-search-input" 
-                               id="cvSearchInput" 
-                               placeholder="Rechercher par entreprise, école, compétence..." 
-                               autocomplete="off">
+            <header class="cv-banner" id="cvBanner">
+                <div class="banner-content-wrapper">
+                    <div class="banner-profile">
+                        <img src="images/profile_pic.jpg" alt="Féliz Luberne" class="banner-profile-image">
                     </div>
-                    <div class="cv-search-autocomplete" id="cvSearchAutocomplete"></div>
+                    <div class="banner-right-content">
+                        <!-- Filter menu -->
+                        <nav class="cv-filter-menu">
+                            <button class="cv-filter-btn active" data-filter="all">Tout</button>
+                            <button class="cv-filter-btn" data-filter="work">Expériences Pro</button>
+                            <button class="cv-filter-btn" data-filter="education">Formations</button>
+                            <button class="cv-filter-btn" data-filter="hackathon">Hackathons</button>
+                            <button class="cv-filter-btn" data-filter="certification">Certifications</button>
+                            <button class="cv-filter-btn" data-filter="association">Associations</button>
+                        </nav>
+                        <div class="cv-search-container">
+                            <div class="cv-search-wrapper">
+                                <svg class="cv-search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                <input type="text" 
+                                       class="cv-search-input" 
+                                       id="cvSearchInput" 
+                                       placeholder="Rechercher par entreprise, école, compétence..." 
+                                       autocomplete="off">
+                            </div>
+                            <div class="cv-search-autocomplete" id="cvSearchAutocomplete"></div>
+                        </div>
+                    </div>
                 </div>
             </header>
 
@@ -292,7 +297,7 @@
                         <div class="cv-intro-details">
                             <div class="cv-intro-detail-item">
                                 <span class="cv-intro-icon">📧</span>
-                                <a href="mailto:fefelbr@gmail.com">fefelbr@gmail.com</a>
+                                <a href="mailto:fefelbrn@gmail.com">fefelbrn@gmail.com</a>
                             </div>
                             <div class="cv-intro-detail-item">
                                 <span class="cv-intro-icon">🔗</span>

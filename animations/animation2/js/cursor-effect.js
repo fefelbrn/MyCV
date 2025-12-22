@@ -10,6 +10,12 @@
     }
     
     function init() {
+        // Check if CV page is visible - if so, don't activate custom cursor
+        function isCVPageVisible() {
+            const cvPage = document.getElementById('cvPage');
+            return cvPage && cvPage.classList.contains('visible');
+        }
+        
         // Generate unique ID for this cursor instance
         const uniqueId = 'cursor-path-' + Math.random().toString(36).substr(2, 9);
         
@@ -47,11 +53,26 @@
         let cursorY = 0;
         let isVisible = false;
         
+        // Function to update cursor visibility based on CV page state
+        function updateCursorState() {
+            if (isCVPageVisible()) {
+                // CV page is visible - hide custom cursor and show default cursor
+                cursor.classList.remove('visible');
+                document.body.style.cursor = '';
+            } else {
+                // CV page is not visible - show custom cursor and hide default cursor
+                if (isVisible) {
+                    cursor.classList.add('visible');
+                }
+                document.body.style.cursor = 'none';
+            }
+        }
+        
         // Track mouse position
         document.addEventListener('mousemove', (e) => {
             mouseX = e.clientX;
             mouseY = e.clientY;
-            if (!isVisible) {
+            if (!isCVPageVisible() && !isVisible) {
                 cursor.classList.add('visible');
                 isVisible = true;
             }
@@ -62,6 +83,21 @@
             cursor.classList.remove('visible');
             isVisible = false;
         });
+        
+        // Watch for CV page visibility changes
+        const cvPage = document.getElementById('cvPage');
+        if (cvPage) {
+            const observer = new MutationObserver(() => {
+                updateCursorState();
+            });
+            observer.observe(cvPage, {
+                attributes: true,
+                attributeFilter: ['class']
+            });
+        }
+        
+        // Initial state check
+        updateCursorState();
         
         // Expose cursor position and radius for collision detection
         window.customCursor = {
@@ -90,9 +126,6 @@
         animateCursor();
         
         // Text rotation is now handled by CSS animation - no JavaScript needed
-        
-        // Hide default cursor on body
-        document.body.style.cursor = 'none';
     }
 })();
 

@@ -73,29 +73,67 @@ body {
     min-height: auto;
     overflow: visible;
     margin: 0 auto 2rem;
-    position: relative;
-    padding: 0;
+    position: sticky;
+    top: 0;
+    padding: 0.75rem 2rem;
+    z-index: 10003;
+    will-change: transform, opacity;
+}
+
+/* .cv-banner.hidden - transform is now controlled directly by JavaScript */
+
+/* Full-width background for sticky banner */
+.cv-banner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px) saturate(180%);
+    -webkit-backdrop-filter: blur(10px) saturate(180%);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* Banner content wrapper - flex layout */
+.banner-content-wrapper {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
 }
 
 .banner-profile {
-    position: relative;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 10000;
-    margin-bottom: 1rem;
+    flex-shrink: 0;
     display: flex;
+    align-items: center;
     justify-content: center;
-    padding: 1rem;
+    padding: 0;
+}
+
+.banner-right-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    min-width: 0;
 }
 
 .banner-profile-image {
-    width: 150px;
-    height: 150px;
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
     object-fit: cover;
     object-position: center;
-    border: 5px solid #ffffff;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    border: 3px solid #ffffff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     display: block;
     position: relative;
 }
@@ -297,7 +335,7 @@ body {
     display: flex;
     gap: 0.75rem;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: flex-start;
     padding: 0;
     margin: 0;
     position: relative;
@@ -344,11 +382,12 @@ body {
 .cv-search-container {
     position: relative;
     width: 100%;
-    max-width: 100%;
-    margin: 1rem auto 0;
+    min-width: 0;
+    flex: 1;
+    margin: 0;
     padding: 0;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
 }
 
@@ -356,7 +395,8 @@ body {
 .cv-search-wrapper {
     position: relative;
     width: 100%;
-    max-width: 840px;
+    min-width: 0;
+    flex: 1;
     display: flex;
     align-items: center;
 }
@@ -546,6 +586,23 @@ body {
 .cv-intro-detail-item a:hover {
     color: #357abd;
     text-decoration: underline;
+}
+
+/* Ensure cursor is visible on links in CV page */
+.cv-page.visible a,
+.cv-page.visible button,
+.cv-page.visible input,
+.cv-page.visible textarea,
+.cv-page.visible select {
+    cursor: pointer !important;
+}
+
+.cv-page.visible a:hover,
+.cv-page.visible button:hover,
+.cv-page.visible input:hover,
+.cv-page.visible textarea:hover,
+.cv-page.visible select:hover {
+    cursor: pointer !important;
 }
 
 .cv-intro-icon {
@@ -991,8 +1048,31 @@ body {
 }
 
 @media (max-width: 768px) {
+    .banner-content-wrapper {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+    
+    .banner-profile-image {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .banner-right-content {
+        width: 100%;
+    }
+    
+    .cv-filter-menu {
+        justify-content: center;
+    }
+    
+    .cv-search-container {
+        justify-content: center;
+    }
+    
     .cv-banner {
-        height: 150px;
+        height: auto;
         margin-bottom: 1rem;
     }
 
@@ -1375,6 +1455,15 @@ body {
     font-family: 'Inter', sans-serif;
     height: 100vh;
     pointer-events: none;
+}
+
+/* Hide animation selector when CV page is visible */
+.cv-page.visible ~ .animation-selector,
+body:has(.cv-page.visible) .animation-selector {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
 }
 
 .animation-selector-tab {
