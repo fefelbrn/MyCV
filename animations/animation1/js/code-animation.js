@@ -88,14 +88,25 @@
     function typeLine(text, lineElement, onComplete) {
         let index = 0;
         isTyping = true;
+        let lastTime = performance.now();
+        const charDelay = 30; // 30ms per character
         
         updateOpacityGradient();
         
-        function typeChar() {
+        function typeChar(currentTime) {
             if (index < text.length) {
-                lineElement.textContent = text.substring(0, index + 1);
-                index++;
-                setTimeout(typeChar, 30); // 30ms feels about right for typing speed
+                const elapsed = currentTime - lastTime;
+                
+                if (elapsed >= charDelay) {
+                    lineElement.textContent = text.substring(0, index + 1);
+                    index++;
+                    lastTime = currentTime;
+                    
+                    // Force a reflow to ensure the browser renders the change
+                    void lineElement.offsetHeight;
+                }
+                
+                requestAnimationFrame(typeChar);
             } else {
                 isTyping = false;
                 lineElement.classList.remove('typing');
@@ -104,7 +115,7 @@
             }
         }
         
-        typeChar();
+        requestAnimationFrame(typeChar);
     }
     
     function generateRandomCode() {
