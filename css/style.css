@@ -361,12 +361,47 @@ body {
 }
 
 .cv-filter-btn:hover {
-    background: rgba(255, 255, 255, 0.8);
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.cv-filter-btn.active {
+/* Hover colors for each filter type */
+.cv-filter-btn[data-filter="all"]:hover {
+    background: rgba(255, 255, 255, 0.8);
+}
+
+.cv-filter-btn[data-filter="work"]:hover {
+    background: rgba(74, 144, 226, 0.15);
+    border-color: rgba(74, 144, 226, 0.3);
+    color: #4a90e2;
+}
+
+.cv-filter-btn[data-filter="education"]:hover {
+    background: rgba(46, 204, 113, 0.15);
+    border-color: rgba(46, 204, 113, 0.3);
+    color: #2ecc71;
+}
+
+.cv-filter-btn[data-filter="hackathon"]:hover {
+    background: rgba(155, 89, 182, 0.15);
+    border-color: rgba(155, 89, 182, 0.3);
+    color: #9b59b6;
+}
+
+.cv-filter-btn[data-filter="certification"]:hover {
+    background: rgba(243, 156, 18, 0.15);
+    border-color: rgba(243, 156, 18, 0.3);
+    color: #f39c12;
+}
+
+.cv-filter-btn[data-filter="association"]:hover {
+    background: rgba(231, 76, 60, 0.15);
+    border-color: rgba(231, 76, 60, 0.3);
+    color: #e74c3c;
+}
+
+/* Active state colors for each filter type */
+.cv-filter-btn.active[data-filter="all"] {
     background: rgba(74, 144, 226, 0.2);
     backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
@@ -375,6 +410,66 @@ body {
     font-weight: 600;
     box-shadow: 
         0 4px 16px rgba(74, 144, 226, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.cv-filter-btn.active[data-filter="work"] {
+    background: rgba(74, 144, 226, 0.2);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-color: rgba(74, 144, 226, 0.4);
+    color: #4a90e2;
+    font-weight: 600;
+    box-shadow: 
+        0 4px 16px rgba(74, 144, 226, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.cv-filter-btn.active[data-filter="education"] {
+    background: rgba(46, 204, 113, 0.2);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-color: rgba(46, 204, 113, 0.4);
+    color: #2ecc71;
+    font-weight: 600;
+    box-shadow: 
+        0 4px 16px rgba(46, 204, 113, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.cv-filter-btn.active[data-filter="hackathon"] {
+    background: rgba(155, 89, 182, 0.2);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-color: rgba(155, 89, 182, 0.4);
+    color: #9b59b6;
+    font-weight: 600;
+    box-shadow: 
+        0 4px 16px rgba(155, 89, 182, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.cv-filter-btn.active[data-filter="certification"] {
+    background: rgba(243, 156, 18, 0.2);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-color: rgba(243, 156, 18, 0.4);
+    color: #f39c12;
+    font-weight: 600;
+    box-shadow: 
+        0 4px 16px rgba(243, 156, 18, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.cv-filter-btn.active[data-filter="association"] {
+    background: rgba(231, 76, 60, 0.2);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-color: rgba(231, 76, 60, 0.4);
+    color: #e74c3c;
+    font-weight: 600;
+    box-shadow: 
+        0 4px 16px rgba(231, 76, 60, 0.2),
         inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 

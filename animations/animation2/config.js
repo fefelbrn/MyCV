@@ -7,7 +7,8 @@ const ANIMATION_CONFIG = {
     scripts: [
         'animations/animation2/js/bubble-background.js',
         'animations/animation2/js/script.js',
-        'animations/animation2/js/cursor-effect.js'
+        'animations/animation2/js/cursor-effect.js',
+        'animations/animation2/js/cv-tab.js'
     ]
 };
 

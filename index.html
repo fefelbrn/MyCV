@@ -98,9 +98,16 @@
                     '.code-animation',
                     '.rings-container',
                     '.easter-egg-circle',
-                    '.loading-screen',
-                    '.cv-tab'
+                    '.loading-screen'
                 ];
+                
+                // cv-tab should be visible on all animations
+                const cvTab = document.querySelector('.cv-tab');
+                if (cvTab) {
+                    cvTab.style.display = '';
+                    cvTab.style.visibility = '';
+                    cvTab.style.opacity = '';
+                }
                 
                 if (selectedAnimation !== '1') {
                     // Hide animation 1 specific elements

@@ -10,10 +10,81 @@
     }
     
     function init() {
+        // Only show terminals on animation 1
+        const currentAnimation = window.ANIMATION_CONFIG?.name || '';
+        if (currentAnimation !== 'animation1') {
+            return;
+        }
+        
         // Check if CV page is visible - don't show terminals on CV page
         const cvPage = document.getElementById('cvPage');
         if (cvPage && cvPage.classList.contains('visible')) {
             return;
+        }
+        
+        // Hide terminals when CV page or loading screen becomes visible
+        const loadingScreen = document.getElementById('loadingScreen');
+        
+        function hideTerminals() {
+            const terminals = document.querySelectorAll('.mac-terminal-window');
+            terminals.forEach(terminal => {
+                terminal.style.display = 'none';
+                terminal.style.visibility = 'hidden';
+                terminal.style.opacity = '0';
+            });
+        }
+        
+        function showTerminals() {
+            const terminals = document.querySelectorAll('.mac-terminal-window');
+            terminals.forEach(terminal => {
+                terminal.style.display = '';
+                terminal.style.visibility = '';
+                terminal.style.opacity = '';
+            });
+        }
+        
+        if (cvPage) {
+            const cvObserver = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    if (mutation.attributeName === 'class') {
+                        if (cvPage.classList.contains('visible')) {
+                            hideTerminals();
+                        } else {
+                            // Only show terminals if loading screen is also not visible
+                            if (!loadingScreen || !loadingScreen.classList.contains('visible')) {
+                                showTerminals();
+                            }
+                        }
+                    }
+                });
+            });
+            
+            cvObserver.observe(cvPage, {
+                attributes: true,
+                attributeFilter: ['class']
+            });
+        }
+        
+        if (loadingScreen) {
+            const loadingObserver = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    if (mutation.attributeName === 'class') {
+                        if (loadingScreen.classList.contains('visible')) {
+                            hideTerminals();
+                        } else {
+                            // Only show terminals if CV page is also not visible
+                            if (!cvPage || !cvPage.classList.contains('visible')) {
+                                showTerminals();
+                            }
+                        }
+                    }
+                });
+            });
+            
+            loadingObserver.observe(loadingScreen, {
+                attributes: true,
+                attributeFilter: ['class']
+            });
         }
         
         const terminals = [
@@ -51,11 +122,63 @@
             }
         ];
         
+        // Store timeout IDs so we can cancel them if needed
+        const timeoutIds = [];
+        
+        // Function to check if terminals should be created
+        function shouldCreateTerminals() {
+            const cvPage = document.getElementById('cvPage');
+            const loadingScreen = document.getElementById('loadingScreen');
+            
+            if (cvPage && cvPage.classList.contains('visible')) {
+                return false;
+            }
+            if (loadingScreen && loadingScreen.classList.contains('visible')) {
+                return false;
+            }
+            return true;
+        }
+        
         terminals.forEach((terminal, index) => {
-            setTimeout(() => {
-                createTerminalWindow(terminal, index);
+            const timeoutId = setTimeout(() => {
+                // Double-check before creating the window
+                if (shouldCreateTerminals()) {
+                    createTerminalWindow(terminal, index);
+                }
             }, terminal.delay);
+            timeoutIds.push(timeoutId);
         });
+        
+        // Cancel all pending timeouts if loading screen or CV page becomes visible
+        const loadingScreen = document.getElementById('loadingScreen');
+        if (loadingScreen) {
+            const cancelObserver = new MutationObserver(() => {
+                if (loadingScreen.classList.contains('visible') || 
+                    (cvPage && cvPage.classList.contains('visible'))) {
+                    // Cancel all pending terminal creation timeouts
+                    timeoutIds.forEach(id => clearTimeout(id));
+                }
+            });
+            
+            cancelObserver.observe(loadingScreen, {
+                attributes: true,
+                attributeFilter: ['class']
+            });
+        }
+        
+        if (cvPage) {
+            const cancelCvObserver = new MutationObserver(() => {
+                if (cvPage.classList.contains('visible')) {
+                    // Cancel all pending terminal creation timeouts
+                    timeoutIds.forEach(id => clearTimeout(id));
+                }
+            });
+            
+            cancelCvObserver.observe(cvPage, {
+                attributes: true,
+                attributeFilter: ['class']
+            });
+        }
     }
     
     function createTerminalWindow(config, zIndex) {
