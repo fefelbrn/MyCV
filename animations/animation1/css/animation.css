@@ -935,6 +935,122 @@
 }
 
 
+/* macOS Terminal Windows */
+.mac-terminal-window {
+    position: fixed;
+    width: 280px;
+    max-width: 85vw;
+    background: rgba(30, 30, 30, 0.95);
+    border-radius: 8px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+    transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+                transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mac-terminal-window.visible {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+}
+
+.mac-terminal-header {
+    background: rgba(50, 50, 50, 0.9);
+    padding: 6px 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mac-terminal-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+.mac-terminal-button {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.mac-terminal-button-red {
+    background: #ff5f56;
+}
+
+.mac-terminal-button-yellow {
+    background: #ffbd2e;
+}
+
+.mac-terminal-button-green {
+    background: #27c93f;
+}
+
+.mac-terminal-title {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 10px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-weight: 500;
+    flex: 1;
+    text-align: center;
+    user-select: none;
+}
+
+.mac-terminal-body {
+    padding: 8px;
+    max-height: 140px;
+    overflow-y: auto;
+    font-family: 'Courier New', 'Monaco', monospace;
+    font-size: 10px;
+}
+
+.mac-terminal-content {
+    min-height: 40px;
+}
+
+.mac-terminal-line {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    margin-bottom: 3px;
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.5;
+}
+
+.mac-terminal-prompt {
+    color: #00ff00;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.mac-terminal-text {
+    color: rgba(255, 255, 255, 0.85);
+    word-wrap: break-word;
+}
+
+.mac-terminal-body::-webkit-scrollbar {
+    width: 6px;
+}
+
+.mac-terminal-body::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.mac-terminal-body::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+}
+
+.mac-terminal-body::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
 /* Hide cursor on interactive elements */
 a, button, input, textarea, select, .cv-tab, .animation-drawer-handle {
     cursor: none !important;
