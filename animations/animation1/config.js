@@ -9,7 +9,8 @@ const ANIMATION_CONFIG = {
         'animations/animation1/js/easter-eggs.js',
         'animations/animation1/js/code-animation.js',
         'animations/animation1/js/cv-tab.js',
-        'animations/animation1/js/cursor-effect.js'
+        'animations/animation1/js/cursor-effect.js',
+        'animations/animation1/js/terminal-windows.js'
     ]
 };
 

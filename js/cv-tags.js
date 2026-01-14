@@ -52,15 +52,15 @@
     // Active tags management
     let activeTags = new Set();
     
-    function combineFilters(filterType) {
+    function combineFilters(selectedFilters) {
         tiles.forEach(tile => {
             const tileType = tile.getAttribute('data-type');
             const tileTags = tile.getAttribute('data-tags');
             
-            // Check type
+            // Check type - support multiple selected filters
             let matchesType = true;
-            if (filterType !== 'all') {
-                matchesType = tileType === filterType;
+            if (selectedFilters && selectedFilters.length > 0 && !selectedFilters.includes('all')) {
+                matchesType = selectedFilters.includes(tileType);
             }
             
             // Check tags
@@ -83,12 +83,12 @@
     }
     
     function updateFilter() {
-        // Get active type filter
-        const activeFilterBtn = document.querySelector('.cv-filter-btn.active');
-        const filterType = activeFilterBtn ? activeFilterBtn.getAttribute('data-filter') : 'all';
+        // Get all active type filters
+        const activeFilterBtns = document.querySelectorAll('.cv-filter-btn.active');
+        const selectedFilters = Array.from(activeFilterBtns).map(btn => btn.getAttribute('data-filter'));
         
         // Combine filters
-        combineFilters(filterType);
+        combineFilters(selectedFilters.length > 0 ? selectedFilters : ['all']);
         
         // Update visual state of tag buttons
         document.querySelectorAll('.cv-tag-btn').forEach(btn => {
@@ -123,11 +123,9 @@
         btn.addEventListener('click', function() {
             // Wait for type filter to be applied, then combine with tags
             setTimeout(() => {
-                const activeFilter = document.querySelector('.cv-filter-btn.active');
-                if (activeFilter) {
-                    const filterType = activeFilter.getAttribute('data-filter');
-                    combineFilters(filterType);
-                }
+                const activeFilters = document.querySelectorAll('.cv-filter-btn.active');
+                const selectedFilters = Array.from(activeFilters).map(btn => btn.getAttribute('data-filter'));
+                combineFilters(selectedFilters.length > 0 ? selectedFilters : ['all']);
             }, 0);
         });
     });
